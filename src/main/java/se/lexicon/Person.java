@@ -1,11 +1,13 @@
 package se.lexicon;
 
+import java.util.Objects;
+
 public class Person {
     private int id;
     private String firstName;
     private String lastName;
     private String email;
-
+    private AppUser credentials;
 
     public Person(int id, String firstName, String lastName, String email) {
         if (firstName == null || lastName == null || email == null) {
@@ -17,7 +19,6 @@ public class Person {
         this.email = email;
     }
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -59,8 +60,33 @@ public class Person {
         this.email = email;
     }
 
+    public AppUser getCredentials() {
+        return credentials;
+    }
 
-    public String getSummary() {
-        return String.format("{id: %d, name: %s %s, email: %s}", id, firstName, lastName, email);
+    public void setCredentials(AppUser credentials) {
+        this.credentials = credentials;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Person{id=%d, firstName='%s', lastName='%s', email='%s'}",
+                id, firstName, lastName, email);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+        Person person = (Person) o;
+        return id == person.id &&
+                firstName.equals(person.firstName) &&
+                lastName.equals(person.lastName) &&
+                email.equals(person.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, email);
     }
 }

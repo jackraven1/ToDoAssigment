@@ -1,6 +1,7 @@
 package se.lexicon;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class TodoItem {
     private int id;
@@ -9,7 +10,6 @@ public class TodoItem {
     private LocalDate deadLine;
     private boolean done;
     private Person creator;
-
 
     public TodoItem(int id, String title, String description, LocalDate deadLine, Person creator) {
         if (title == null || title.isEmpty() || deadLine == null || creator == null) {
@@ -23,7 +23,6 @@ public class TodoItem {
         this.done = false;
     }
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -37,9 +36,6 @@ public class TodoItem {
     }
 
     public void setTitle(String title) {
-        if (title == null || title.isEmpty()) {
-            throw new IllegalArgumentException("Title cannot be null or empty.");
-        }
         this.title = title;
     }
 
@@ -56,9 +52,6 @@ public class TodoItem {
     }
 
     public void setDeadLine(LocalDate deadLine) {
-        if (deadLine == null) {
-            throw new IllegalArgumentException("Deadline cannot be null.");
-        }
         this.deadLine = deadLine;
     }
 
@@ -75,20 +68,29 @@ public class TodoItem {
     }
 
     public void setCreator(Person creator) {
-        if (creator == null) {
-            throw new IllegalArgumentException("Creator cannot be null.");
-        }
         this.creator = creator;
     }
 
-
-    public String getSummary() {
-        return String.format("{id: %d, title: %s, description: %s, deadline: %s, done: %b, creator: %s}",
-                id, title, description, deadLine, done, creator.getSummary());
+    @Override
+    public String toString() {
+        return String.format("TodoItem{id=%d, title='%s', description='%s', deadline=%s, done=%b}",
+                id, title, description, deadLine, done);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof TodoItem)) return false;
+        TodoItem todoItem = (TodoItem) o;
+        return id == todoItem.id &&
+                done == todoItem.done &&
+                title.equals(todoItem.title) &&
+                Objects.equals(description, todoItem.description) &&
+                deadLine.equals(todoItem.deadLine);
+    }
 
-    public boolean isOverdue() {
-        return LocalDate.now().isAfter(deadLine);
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, description, deadLine, done);
     }
 }
